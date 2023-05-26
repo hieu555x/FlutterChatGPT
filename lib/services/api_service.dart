@@ -42,9 +42,10 @@ class ApiService {
   //Send Messgae Function
   static Future<List<ChatModel>> sendMessage(
       {required String message, required String modelID}) async {
+    log("Model: $modelID");
     try {
       var response = await http.post(
-        Uri.parse("$BASE_URL/completions"),
+        Uri.parse("$BASE_URL/chat/completions"),
         headers: {
           "Authorization": "Bearer $API_KEY",
           "Content-Type": "application/json",
@@ -52,8 +53,9 @@ class ApiService {
         body: jsonEncode(
           {
             "model": modelID,
-            "prompt": message,
-            "max_tokens": 1000,
+            "messages": [
+              {"role": "user", "content": message}
+            ]
           },
         ),
       );
@@ -72,7 +74,8 @@ class ApiService {
         chatModelsList = List.generate(
           jsonResponse["choices"].length,
           (index) => ChatModel(
-              message: jsonResponse["choices"][index]["text"], chatIndex: 1),
+              message: jsonResponse["choices"][index]["message"]["content"],
+              chatIndex: 1),
         );
       }
       return chatModelsList;

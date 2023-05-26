@@ -19,6 +19,7 @@ class TextWidget extends StatelessWidget {
     return Text(
       label,
       style: TextStyle(
+        fontFamily: 'Roboto',
         color: color ?? Colors.white,
         fontSize: fontSize,
         fontWeight: fontWeight ?? FontWeight.w500,
